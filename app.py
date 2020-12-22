@@ -12,7 +12,7 @@ CHROME_ARGS = [
     '--disable-plugins',  # プラグイン無効
     '--disable-extensions',  # 拡張機能無効
     '--disable-dev-tools',  # デベロッパーツールを無効にする
-]
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', 0))
 port = s.getsockname()[1]
@@ -23,7 +23,7 @@ options = {
         'port': port,
         'cmdline_args': CHROME_ARGS
 }
-eel.start("html/aaa.html", options=options,suppress_error=True, port = port)
+eel.start("html/index.html", options=options,suppress_error=True, port = port)
 
 
 @eel.expose
@@ -51,4 +51,4 @@ def kimetsu_search(word,csv_name):
     print(source)
     
 # 最初に表示するhtmlページ
-eel.start("html/aaa.html")
+eel.start("html/index.html")
