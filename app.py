@@ -23,8 +23,6 @@ options = {
         'port': port,
         'cmdline_args': CHROME_ARGS
 }
-eel.start("html/index.html", options=options,suppress_error=True, port = port)
-
 
 @eel.expose
 def kimetsu_search(word,csv_name):
@@ -49,6 +47,5 @@ def kimetsu_search(word,csv_name):
     df=pd.DataFrame(source,columns=["name"])
     df.to_csv("./{}".format(csv_name),encoding="utf_8-sig")
     print(source)
-    
-# 最初に表示するhtmlページ
-eel.start("index.html")
+
+eel.start("index.html", options=options, suppress_error=True)
