@@ -3,8 +3,7 @@ import eel
 import socket
 import pandas as pd
 
-# ウエブコンテンツを持つフォルダー
-eel.init('web', allowed_extensions=['.js', '.html', '.css'])
+
 
 CHROME_ARGS = [
     '--incognit',  # シークレットモード
@@ -13,6 +12,8 @@ CHROME_ARGS = [
     '--disable-extensions',  # 拡張機能無効
     '--disable-dev-tools',  # デベロッパーツールを無効にする
 ]
+ALLOW_EXTENSIONS = ['.html', '.css', '.js', '.ico']
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', 0))
 port = s.getsockname()[1]
@@ -23,6 +24,7 @@ options = {
         'port': port,
         'cmdline_args': CHROME_ARGS
 }
+size=(700,600)
 
 @eel.expose
 def kimetsu_search(word,csv_name):
@@ -33,19 +35,22 @@ def kimetsu_search(word,csv_name):
     # 検索
     if word in source:
         print("『{}』はいます".format(word))
-        #eel.view_log_js("『{}』はいます".format(word))
+        eel.view_log_js("『{}』はいます".format(word))
     else:
         print("『{}』はありません".format(word))
-        #eel.view_log_js("『{}』はいません".format(word))
-        #eel.view_log_js("『{}』を追加します".format(word))
+        eel.view_log_js("『{}』はいません".format(word))
+        eel.view_log_js("『{}』を追加します".format(word))
         # 追加
-        #add_flg=input("追加登録しますか？(0:しない 1:する)　＞＞　")
-        #if add_flg=="1":
-        source.append(word)
+        add_flg=input("追加登録しますか？(0:しない 1:する)　＞＞　")
+        if add_flg=="1":
+            source.append(word)
     
     # CSV書き込み
     df=pd.DataFrame(source,columns=["name"])
     df.to_csv("./{}".format(csv_name),encoding="utf_8-sig")
     print(source)
 
-eel.start('index.html', options=options, suppress_error=True)
+
+# ウエブコンテンツを持つフォルダー
+eel.init('web',allowed_extensions=ALLOW_EXTENSIONS)
+eel.start('index.html',options=options,size=size, suppress_error=True)
